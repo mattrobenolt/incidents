@@ -7,9 +7,10 @@ from incidents.models import Event
 class EventIndex(CelerySearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     plugin = indexes.CharField(model_attr='plugin')
+    project_id = indexes.IntegerField(model_attr='project_id')
+    actor_id = indexes.IntegerField(model_attr='actor_id', null=True)
+    incident_id = indexes.IntegerField(model_attr='incident_id', null=True)
     created = indexes.DateTimeField(model_attr='created')
-    project = indexes.IntegerField(model_attr='project_id')
-    incident = indexes.IntegerField(model_attr='incident_id', null=True)
     level = indexes.IntegerField(model_attr='level')
 
     def get_model(self):
