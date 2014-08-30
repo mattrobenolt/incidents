@@ -1,14 +1,33 @@
-from django.http import Http404, HttpResponse
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import View
+from django.views.generic import View, TemplateView
 
-from incidents.models import Project
+from incidents.models import Project, Team
 from incidents.plugins.registry import get_plugin_or_404
 
 
-def home(self):
-    return HttpResponse('hello')
+class IndexView(TemplateView):
+    template_name = 'index.jinja'
+
+    def get_context_data(self, **kwargs):
+        return {'teams': Team.objects.all().prefetch_related('projects')}
+
+
+class TeamDetailView(TemplateView):
+    template_name = 'team.jinja'
+
+    def get_context_data(self, team):
+        team = get_object_or_404(Team.objects.prefetch_related('projects'), slug=team)
+        return {'team': team}
+
+
+class ProjectDetailView(TemplateView):
+    template_name = 'project.jinja'
+
+    def get_context_data(self, team, project):
+        project = get_object_or_404(Project.objects.select_related('team'), slug=project, team__slug=team)
+        return {'project': project}
 
 
 class HooksRouter(View):

@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.core.urlresolvers import reverse
 
 
 class TeamManager(models.Manager):
@@ -20,6 +21,9 @@ class Team(models.Model):
 
     def __unicode__(self):
         return u'{0} ({1})'.format(self.name, self.slug)
+
+    def get_absolute_url(self):
+        return reverse('team_detail', args=[self.slug])
 
 
 class TeamMember(models.Model):

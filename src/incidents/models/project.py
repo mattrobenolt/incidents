@@ -1,6 +1,7 @@
 from uuid import uuid4
 from django.conf import settings
 from django.db import models
+from django.core.urlresolvers import reverse
 
 from .incident import Incident
 
@@ -17,7 +18,7 @@ class ProjectManager(models.Manager):
 class Project(models.Model):
     slug = models.SlugField()
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
-    team = models.ForeignKey('incidents.Team')
+    team = models.ForeignKey('incidents.Team', related_name='projects')
     name = models.CharField(max_length=250)
 
     objects = ProjectManager()
@@ -41,6 +42,9 @@ class Project(models.Model):
 
     def __unicode__(self):
         return u'{0} ({1})'.format(self.name, self.slug)
+
+    def get_absolute_url(self):
+        return reverse('project_detail', args=[self.team.slug, self.slug])
 
 
 class ProjectMember(models.Model):

@@ -1,0 +1,11 @@
+<ul>
+{% for team in teams %}
+    <li><a href="{{ team.get_absolute_url() }}">{{ team }}</a>
+        <ul>
+        {% for project in team.projects.all() %}
+            <li><a href="{{ project.get_absolute_url() }}">{{ project }}</a></li>
+        {% endfor %}
+        </ul>
+    </li>
+{% endfor %}
+</ul>
