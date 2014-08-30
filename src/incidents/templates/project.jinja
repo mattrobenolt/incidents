@@ -1,4 +1,7 @@
 <h1>{{ project.team.name }} / {{ project.name }}</h1>
+<form>
+<label for="q"><input name="q" value="{{ query }}"></input></label>
+</form>
 <ul>
 {% for event in events %}
     <li>{{ event.object }}</li>

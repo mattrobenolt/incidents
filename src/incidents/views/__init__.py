@@ -51,7 +51,7 @@ class ProjectDetailView(LoginRequiredMixin, TemplateView):
         if self.request.GET.get('q'):
             filters['content'] = self.request.GET['q']
         events = events.filter(**filters).order_by('-level', '-created').load_all()[:limit]
-        return {'project': project, 'events': events}
+        return {'project': project, 'events': events, 'query': self.request.GET.get('q')}
 
 
 class HooksRouter(View):
