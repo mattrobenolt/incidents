@@ -1,0 +1,5 @@
+{% for event in events %}
+{% if event.title %}<h1>{{ event.title }}</h1>{% endif %}
+{% if event.message %}<p>{{ event.message }}</p>{% endif %}
+{% if event.actor %}<small>by {{ event.actor }}</small>{% endif %}
+{% endfor %}
