@@ -36,10 +36,6 @@ class BasePlugin(object):
     class Meta:
         abstract = True
 
-    def get_actor(self, alias):
-        actor, _ = Actor.objects.get_or_create(alias=alias, plugin=self.slug)
-        return actor
-
 
 class IngestPlugin(BasePlugin):
     "Base plugin that ingests data from other sources"
@@ -50,6 +46,10 @@ class IngestPlugin(BasePlugin):
     class Meta:
         abstract = True
 
+    def get_actor(self, alias):
+        actor, _ = Actor.objects.get_or_create(alias=alias, plugin=self.slug)
+        return actor
+
     def create_event(self, actor, project, **extra_fields):
         if 'level' not in extra_fields:
             extra_fields['level'] = self.default_level
@@ -57,7 +57,7 @@ class IngestPlugin(BasePlugin):
                                           plugin=self.slug, **extra_fields)
 
     def render_to_string(self, events):
-        return render_to_string(self.template_name, {'events': events})
+        return render_to_string(self.template_name, {'events': events}).strip()
 
 
 class HttpIngestPlugin(IngestPlugin, View):

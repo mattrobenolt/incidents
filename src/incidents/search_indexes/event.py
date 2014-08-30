@@ -20,3 +20,7 @@ class EventIndex(CelerySearchIndex, indexes.Indexable):
         model = self.get_model()
         now = timezone.now()
         return model.objects.using(using).filter(modified__lte=now)
+
+    def load_all_queryset(self):
+        model = self.get_model()
+        return model.objects.select_related()

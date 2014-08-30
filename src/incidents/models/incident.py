@@ -89,3 +89,8 @@ class Event(models.Model):
 
     objects = EventManager()
     search = SearchManager()
+
+    def __unicode__(self):
+        from ..plugins.registry import lookup
+        plugin = lookup(self.plugin)()
+        return unicode(plugin.render_to_string([self]))

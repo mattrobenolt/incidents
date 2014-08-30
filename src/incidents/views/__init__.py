@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View, TemplateView
 
-from incidents.models import Project, Team
+from incidents.models import Project, Team, Event
 from incidents.plugins.registry import get_plugin_or_404
 
 
@@ -43,7 +43,15 @@ class ProjectDetailView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, team, project):
         qs = Project.objects.select_related('team').filter(members__user=self.request.user)
         project = get_object_or_404(qs, slug=project, team__slug=team)
-        return {'project': project}
+        events = Event.search.all()
+        filters = {
+            'project_id': project.pk,
+        }
+        limit = min(100, int(self.request.GET.get('limit', 10)))
+        if self.request.GET.get('q'):
+            filters['content'] = self.request.GET['q']
+        events = events.filter(**filters).order_by('-level', '-created').load_all()[:limit]
+        return {'project': project, 'events': events}
 
 
 class HooksRouter(View):
