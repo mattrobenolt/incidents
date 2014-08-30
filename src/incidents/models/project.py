@@ -49,7 +49,7 @@ class Project(models.Model):
 
 class ProjectMember(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, related_name='members')
 
 
 class KeyManager(models.Manager):

@@ -28,7 +28,7 @@ class Team(models.Model):
 
 class TeamMember(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    team = models.ForeignKey(Team)
+    team = models.ForeignKey(Team, related_name='members')
 
     class Meta:
         unique_together = ('user', 'team')

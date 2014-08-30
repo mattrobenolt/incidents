@@ -1,4 +1,6 @@
+from django.db.models import Prefetch
 from django.http import Http404
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View, TemplateView
@@ -7,26 +9,38 @@ from incidents.models import Project, Team
 from incidents.plugins.registry import get_plugin_or_404
 
 
-class IndexView(TemplateView):
+class LoginRequiredMixin(object):
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super(LoginRequiredMixin, cls).as_view(**initkwargs)
+        return login_required(view)
+
+
+class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'index.jinja'
 
     def get_context_data(self, **kwargs):
-        return {'teams': Team.objects.all().prefetch_related('projects')}
+        qs = Project.objects.filter(members__user=self.request.user)
+        projects = Prefetch('projects', queryset=qs)
+        teams = Team.objects.prefetch_related(projects).filter(members__user=self.request.user)
+        return {'teams': teams}
 
 
-class TeamDetailView(TemplateView):
+class TeamDetailView(LoginRequiredMixin, TemplateView):
     template_name = 'team.jinja'
 
     def get_context_data(self, team):
-        team = get_object_or_404(Team.objects.prefetch_related('projects'), slug=team)
+        qs = Team.objects.prefetch_related('projects').filter(members__user=self.request.user)
+        team = get_object_or_404(qs, slug=team)
         return {'team': team}
 
 
-class ProjectDetailView(TemplateView):
+class ProjectDetailView(LoginRequiredMixin, TemplateView):
     template_name = 'project.jinja'
 
     def get_context_data(self, team, project):
-        project = get_object_or_404(Project.objects.select_related('team'), slug=project, team__slug=team)
+        qs = Project.objects.select_related('team').filter(members__user=self.request.user)
+        project = get_object_or_404(qs, slug=project, team__slug=team)
         return {'project': project}
 
 

@@ -1,3 +1,4 @@
+<h1>{{ team.name }}</h1>
 <ul>
 {% for project in team.projects.all() %}
     <li><a href="{{ project.get_absolute_url() }}">{{ project }}</a></li>
