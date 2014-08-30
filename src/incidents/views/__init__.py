@@ -20,8 +20,8 @@ class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'index.jinja'
 
     def get_context_data(self, **kwargs):
-        qs = Project.objects.filter(members__user=self.request.user)
-        projects = Prefetch('projects', queryset=qs)
+        projects = Prefetch(
+            'projects', queryset=Project.objects.filter(members__user=self.request.user))
         teams = Team.objects.prefetch_related(projects).filter(members__user=self.request.user)
         return {'teams': teams}
 
@@ -30,7 +30,9 @@ class TeamDetailView(LoginRequiredMixin, TemplateView):
     template_name = 'team.jinja'
 
     def get_context_data(self, team):
-        qs = Team.objects.prefetch_related('projects').filter(members__user=self.request.user)
+        projects = Prefetch(
+            'projects', queryset=Project.objects.filter(members__user=self.request.user))
+        qs = Team.objects.prefetch_related(projects).filter(members__user=self.request.user)
         team = get_object_or_404(qs, slug=team)
         return {'team': team}
 
