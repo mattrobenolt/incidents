@@ -15,5 +15,5 @@ urlpatterns = patterns(
     url(r'^(?P<team>[a-z0-9-]+)/$', TeamDetailView.as_view(), name='team_detail'),
     url(r'^(?P<team>[a-z0-9-]+)/(?P<project>[a-z0-9-]+)/$', ProjectDetailView.as_view(), name='project_detail'),
 
-    url(r'^api/(?P<project>\d+)/hooks/(?P<plugin>[\w-]+)/', HooksRouter.as_view()),
+    url(r'^api/(?P<key>[a-f0-9]{32})/hooks/(?P<plugin>[\w-]+)/', HooksRouter.as_view()),
 )

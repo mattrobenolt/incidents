@@ -58,7 +58,7 @@ class HooksRouter(View):
     _view_cache = {}
 
     @csrf_exempt
-    def dispatch(self, request, project, plugin, *args, **kwargs):
+    def dispatch(self, request, key, plugin, *args, **kwargs):
         try:
             view = self._view_cache[plugin]
         except KeyError:
@@ -72,5 +72,5 @@ class HooksRouter(View):
         if view is None:
             raise Http404('No HttpIngestPlugin matches the given query.')
 
-        project = get_object_or_404(Project.objects.select_related('owner', 'team'), pk=project)
+        project = get_object_or_404(Project.objects.select_related('owner', 'team'), keys__public=key)
         return view(request, project, *args, **kwargs)

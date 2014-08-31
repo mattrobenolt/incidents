@@ -62,7 +62,7 @@ class KeyManager(models.Manager):
 
 class Key(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, related_name='keys')
     public = models.CharField(max_length=32, unique=True)
     private = models.CharField(max_length=32, unique=True)
 
