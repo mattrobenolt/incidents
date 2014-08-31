@@ -72,5 +72,7 @@ class HooksRouter(View):
         if view is None:
             raise Http404('No HttpIngestPlugin matches the given query.')
 
-        project = get_object_or_404(Project.objects.select_related('owner', 'team'), keys__public=key)
+        project = get_object_or_404(
+            Project.objects.select_related('owner', 'team'),
+            keys__public=key, keys__is_active=True)
         return view(request, project, *args, **kwargs)

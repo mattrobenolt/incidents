@@ -65,6 +65,8 @@ class Key(models.Model):
     project = models.ForeignKey(Project, related_name='keys')
     public = models.CharField(max_length=32, unique=True)
     private = models.CharField(max_length=32, unique=True)
+    comment = models.CharField(max_length=50, blank=True)
+    is_active = models.BooleanField(default=True)
 
     objects = KeyManager()
 
