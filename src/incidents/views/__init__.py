@@ -7,6 +7,7 @@ from django.views.generic import View, TemplateView
 
 from incidents.models import Project, Team, Event
 from incidents.plugins.registry import get_plugin_or_404
+from incidents.decorators import teammember_required, projectmember_required
 
 
 class LoginRequiredMixin(object):
@@ -16,33 +17,42 @@ class LoginRequiredMixin(object):
         return login_required(view)
 
 
+class TeamMemberRequiredMixin(LoginRequiredMixin):
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super(TeamMemberRequiredMixin, cls).as_view(**initkwargs)
+        return teammember_required(view)
+
+
+class ProjectMemberRequiredMixin(LoginRequiredMixin):
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super(ProjectMemberRequiredMixin, cls).as_view(**initkwargs)
+        return projectmember_required(view)
+
+
 class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'index.jinja'
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self):
         projects = Prefetch(
             'projects', queryset=Project.objects.filter(members__user=self.request.user))
         teams = Team.objects.prefetch_related(projects).filter(members__user=self.request.user)
         return {'teams': teams}
 
 
-class TeamDetailView(LoginRequiredMixin, TemplateView):
+class TeamDetailView(TeamMemberRequiredMixin, TemplateView):
     template_name = 'team.jinja'
 
     def get_context_data(self, team):
-        projects = Prefetch(
-            'projects', queryset=Project.objects.filter(members__user=self.request.user))
-        qs = Team.objects.prefetch_related(projects).filter(members__user=self.request.user)
-        team = get_object_or_404(qs, slug=team)
-        return {'team': team}
+        projects = Project.objects.filter(team=team, members__user=self.request.user)
+        return {'team': team, 'projects': projects}
 
 
-class ProjectDetailView(LoginRequiredMixin, TemplateView):
+class ProjectDetailView(ProjectMemberRequiredMixin, TemplateView):
     template_name = 'project.jinja'
 
     def get_context_data(self, team, project):
-        qs = Project.objects.select_related('team').filter(members__user=self.request.user)
-        project = get_object_or_404(qs, slug=project, team__slug=team)
         events = Event.search.all()
         filters = {
             'project_id': project.pk,
