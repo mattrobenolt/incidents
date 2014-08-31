@@ -53,9 +53,10 @@ class ProjectMember(models.Model):
 
 
 class KeyManager(models.Manager):
-    def create_key(self, owner, project):
+    def create_key(self, owner, project, comment=''):
         key = self.model(owner=owner, project=project,
-                         public=uuid4().hex, private=uuid4().hex)
+                         public=uuid4().hex, private=uuid4().hex,
+                         comment=comment)
         key.save(using=self._db)
         return key
 
