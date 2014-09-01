@@ -11,6 +11,7 @@ from setuptools.command.test import test as TestCommand
 
 install_requires = [
     'Django',
+    'django-allauth',
     'django-jinja',
     'django-haystack',
     'celery',

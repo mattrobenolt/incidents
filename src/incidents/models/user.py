@@ -6,16 +6,18 @@ from django.core.mail import send_mail
 
 
 class UserManager(BaseUserManager):
-    def _create_user(self, email, password,
+    def _create_user(self, username, email, password,
                      is_staff, is_superuser, **extra_fields):
         """
-        Creates and saves a User with the given email and password.
+        Creates and saves a User with the given username, email, and password.
         """
+        if not username:
+            raise ValueError('The given username must be set')
         if not email:
             raise ValueError('The given email must be set')
         now = timezone.now()
         email = self.normalize_email(email)
-        user = self.model(email=email,
+        user = self.model(username=username, email=email,
                           is_staff=is_staff, is_active=True,
                           is_superuser=is_superuser,
                           date_joined=now, **extra_fields)
@@ -23,16 +25,17 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_user(self, email, password=None, **extra_fields):
-        return self._create_user(email, password, False, False,
+    def create_user(self, username, email, password=None, **extra_fields):
+        return self._create_user(username, email, password, False, False,
                                  **extra_fields)
 
-    def create_superuser(self, email, password, **extra_fields):
-        return self._create_user(email, password, True, True,
+    def create_superuser(self, username, email, password, **extra_fields):
+        return self._create_user(username, email, password, True, True,
                                  **extra_fields)
 
 
 class User(AbstractBaseUser):
+    username = models.CharField(_('username'), max_length=50, unique=True)
     email = models.EmailField(_('email address'), unique=True)
     name = models.CharField(_('name'), max_length=100, blank=True)
     is_staff = models.BooleanField(
@@ -51,7 +54,8 @@ class User(AbstractBaseUser):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ('email',)
 
     class Meta:
         verbose_name = _('user')

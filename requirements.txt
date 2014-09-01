@@ -1,5 +1,6 @@
 -e .
 https://www.djangoproject.com/download/1.7c3/tarball/
+django-allauth
 django-jinja
 django-haystack
 celery

@@ -17,14 +17,14 @@ class LoginRequiredMixin(object):
         return login_required(view)
 
 
-class TeamMemberRequiredMixin(LoginRequiredMixin):
+class TeamMemberRequiredMixin(object):
     @classmethod
     def as_view(cls, **initkwargs):
         view = super(TeamMemberRequiredMixin, cls).as_view(**initkwargs)
         return teammember_required(view)
 
 
-class ProjectMemberRequiredMixin(LoginRequiredMixin):
+class ProjectMemberRequiredMixin(object):
     @classmethod
     def as_view(cls, **initkwargs):
         view = super(ProjectMemberRequiredMixin, cls).as_view(**initkwargs)
@@ -41,7 +41,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
         return {'teams': teams}
 
 
-class TeamDetailView(TeamMemberRequiredMixin, TemplateView):
+class TeamDetailView(LoginRequiredMixin, TeamMemberRequiredMixin, TemplateView):
     template_name = 'team.jinja'
 
     def get_context_data(self, team):
@@ -49,7 +49,7 @@ class TeamDetailView(TeamMemberRequiredMixin, TemplateView):
         return {'team': team, 'projects': projects}
 
 
-class ProjectDetailView(ProjectMemberRequiredMixin, TemplateView):
+class ProjectDetailView(LoginRequiredMixin, ProjectMemberRequiredMixin, TemplateView):
     template_name = 'project.jinja'
 
     def get_context_data(self, team, project):

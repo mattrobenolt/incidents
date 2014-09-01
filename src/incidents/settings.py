@@ -33,12 +33,15 @@ DJANGO_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 )
 
 THIRD_PARTY_APPS = (
     'django_jinja',
     'haystack',
     'celery_haystack',
+    'allauth',
+    'allauth.account',
 )
 
 INCIDENTS_APPS = (
@@ -60,6 +63,20 @@ TEMPLATE_LOADERS = (
     'django_jinja.loaders.AppLoader',
     'django_jinja.loaders.FileSystemLoader',
 )
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.core.context_processors.request',
+    'django.contrib.messages.context_processors.messages',
+    'allauth.account.context_processors.account',
+)
+
+SITE_ID = 1
 
 ROOT_URLCONF = 'incidents.urls'
 
@@ -110,7 +127,20 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
+# Auth
+
 AUTH_USER_MODEL = 'incidents.User'
+LOGIN_URL = '/accounts/login/'
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_MIN_LENGTH = 3
+ACCOUNT_PASSWORD_MIN_LENGTH = 6
+
+AUTHENTICATION_BACKENDS = (
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
 
 
 # Celery
@@ -118,3 +148,8 @@ AUTH_USER_MODEL = 'incidents.User'
 BROKER_URL = 'redis://localhost:6379/0'
 CELERY_ALWAYS_EAGER = DEBUG
 CELERY_ACKS_LATE = True
+
+
+# Email
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
