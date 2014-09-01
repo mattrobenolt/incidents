@@ -37,6 +37,12 @@ class Project(models.Model):
         member.save()
         return member
 
+    def add_key(self, owner=None, comment=''):
+        if owner is None:
+            owner = self.owner
+        key = Key.objects.create_key(owner=owner, project=self, comment=comment)
+        return key
+
     class Meta:
         unique_together = ('slug', 'team')
 
