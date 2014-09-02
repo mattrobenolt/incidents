@@ -7,11 +7,12 @@ from ..db.manager import SearchManager
 
 class Actor(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)
+    project = models.ForeignKey('incidents.Project')
     alias = models.CharField(max_length=250, db_index=True)
     plugin = models.CharField(max_length=250, db_index=True)
 
     class Meta:
-        unique_together = ('alias', 'plugin')
+        unique_together = ('project', 'alias', 'plugin')
 
     def __unicode__(self):
         return u'{0} ({1})'.format(self.alias, self.plugin)
