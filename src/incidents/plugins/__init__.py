@@ -46,8 +46,8 @@ class IngestPlugin(BasePlugin):
     class Meta:
         abstract = True
 
-    def get_actor(self, alias):
-        actor, _ = Actor.objects.get_or_create(alias=alias, plugin=self.slug)
+    def get_actor(self, project, alias):
+        actor, _ = Actor.objects.get_or_create(project=project, alias=alias, plugin=self.slug)
         return actor
 
     def create_event(self, actor, project, **extra_fields):

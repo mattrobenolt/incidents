@@ -27,7 +27,7 @@ class HubotPlugin(HttpIngestPlugin):
         payload = json.loads(data)
         text = payload['text']
         name = payload['user']['name']
-        actor = self.get_actor(name)
+        actor = self.get_actor(project, name)
         self.create_event(
             actor=actor,
             project=project,
