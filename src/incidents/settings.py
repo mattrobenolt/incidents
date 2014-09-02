@@ -157,14 +157,14 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Team
 
-TEAM_NAME_BLACKLIST = frozenset((
+TEAM_SLUG_BLACKLIST = frozenset((
     'admin', 'accounts', 'api', 'help', 'settings', 'manage', 'docs',
     'login', 'logout', 'password', 'new', 'add', 'edit', 'delete',
 ))
-TEAM_NAME_MIN_LENGTH = 3
+TEAM_SLUG_MIN_LENGTH = 3
 
 
 # Project
 
-PROJECT_NAME_BLACKLIST = TEAM_NAME_BLACKLIST
-PROJECT_NAME_MIN_LENGTH = TEAM_NAME_MIN_LENGTH
+PROJECT_SLUG_BLACKLIST = TEAM_SLUG_BLACKLIST
+PROJECT_SLUG_MIN_LENGTH = TEAM_SLUG_MIN_LENGTH
