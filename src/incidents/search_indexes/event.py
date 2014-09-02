@@ -23,4 +23,5 @@ class EventIndex(CelerySearchIndex, indexes.Indexable):
 
     def load_all_queryset(self):
         model = self.get_model()
-        return model.objects.select_related()
+        return model.objects.select_related(
+            'team', 'project', 'incident', 'actor__user')
