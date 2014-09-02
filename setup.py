@@ -10,7 +10,7 @@ from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 
 install_requires = [
-    'Django',
+    'Django>=1.7',
     'django-allauth',
     'django-jinja',
     'django-haystack',
