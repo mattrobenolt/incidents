@@ -1,4 +1,4 @@
 {% for event in events %}
-{{ event.created.strftime('%H:%M:%S') }} {{ event.actor }}: {{ event.message }}
+{{ event.created.strftime('%H:%M:%S') }} {{ event.actor }}: {{ event.message|safe }}
 {% if not loop.last %}<br />{% endif %}
 {% endfor %}
