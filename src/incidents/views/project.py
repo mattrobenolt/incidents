@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import TemplateView, edit
 
-from incidents.models import Event
+from incidents.models import Event, Project
 from incidents.decorators import projectmember_required
 from incidents.forms.project import ProjectForm
 from incidents.views.team import MembershipRequiredMixin as TeamMembershipRequiredMixin
@@ -31,8 +31,12 @@ class DetailView(LoginRequiredMixin, MembershipRequiredMixin, TemplateView):
 
 
 class CRUDView(LoginRequiredMixin):
+    model = Project
     template_name = 'project/form.jinja'
     form_class = ProjectForm
+
+    def get_object(self):
+        return self.kwargs['project']
 
 
 class CreateView(CRUDView, TeamMembershipRequiredMixin, edit.CreateView):
