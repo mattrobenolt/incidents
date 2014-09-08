@@ -1,13 +1,61 @@
 {% extends "bootstrap.jinja" %}
 
 {% block content %}
+<style type="text/css">
+h1 .input-lg {
+    font-size: 36px;
+    height: 54px;
+}
+
+pre {
+    border-radius: inherit;
+}
+
+.list-group-item.active {
+    /*border-color: inherit !important;*/
+    background-color: #f9f9e0;
+    color: #333 !important;
+}
+
+.list-group-item.active:hover {
+    background-color: #f9f9e0;
+    border-color: none;
+    color: inherit;
+}
+
+.list-group-item {
+    border-left: 5px solid #ccc;
+    padding: 6px 15px;
+}
+
+.list-group-item.ignore {
+    border-left-color: #ddd;
+    color: #eee;
+    text-decoration: line-through;
+    font-size: 0.8em;
+}
+
+.list-group-item.insignificant {
+    border-left-color: #ccc;
+}
+
+.list-group-item.significant {
+    border-left-color: #0ac;
+    font-size: 1em;
+}
+
+.list-group-item.key {
+    border-left-color: #f00;
+    font-size: 1.2em;
+}
+</style>
 <h1>{{ project.team.name }} / {{ project.name }}</h1>
 <form>
 <input name="q" value="{{ query }}" placeholder="Search" class="form-control input-lg" />
 </form>
 <ul class="list-group">
 {% for event in events %}
-    <li class="list-group-item">{{ event.object }}</li>
+    {{ event.object|safe }}
 {% endfor %}
 </ul>
 {% endblock %}

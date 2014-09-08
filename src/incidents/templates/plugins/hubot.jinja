@@ -1,4 +1,4 @@
 {% for event in events %}
-{{ event.created.strftime('%H:%M:%S') }} {{ event.actor }}: {{ event.message|safe }}
+<pre class="list-group-item">{{ event.created.strftime('%H:%M:%S') }} {{ event.actor }}: {{ event.message|safe }}</pre>
 {% if not loop.last %}<br />{% endif %}
 {% endfor %}
