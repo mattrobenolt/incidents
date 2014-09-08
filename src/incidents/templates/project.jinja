@@ -1,9 +1,13 @@
+{% extends "bootstrap.jinja" %}
+
+{% block content %}
 <h1>{{ project.team.name }} / {{ project.name }}</h1>
 <form>
-<input name="q" value="{{ query }}" placeholder="Search" />
+<input name="q" value="{{ query }}" placeholder="Search" class="form-control input-lg" />
 </form>
-<ul>
+<ul class="list-group">
 {% for event in events %}
-    <li>{{ event.object }}</li>
+    <li class="list-group-item">{{ event.object }}</li>
 {% endfor %}
 </ul>
+{% endblock %}

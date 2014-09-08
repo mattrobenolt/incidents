@@ -1,5 +1,8 @@
+{% extends "bootstrap.jinja" %}
+
+{% block content %}
 <h1>Teams</h1>
-<a href="new/">New</a>
+<a href="new/" class="btn btn-primary">New Team</a>
 <ul>
 {% for team in teams %}
     <li><a href="{{ team.get_absolute_url() }}">{{ team }}</a>
@@ -11,3 +14,4 @@
     </li>
 {% endfor %}
 </ul>
+{% endblock %}

@@ -1,7 +1,11 @@
+{% extends "bootstrap.jinja" %}
+
+{% block content %}
 <h1>{{ team.name }}</h1>
-<a href="new/">New</a>
+<a href="new/" class="btn btn-primary">New Project</a>
 <ul>
 {% for project in projects %}
     <li><a href="{{ project.get_absolute_url() }}">{{ project }}</a></li>
 {% endfor %}
 </ul>
+{% endblock %}
