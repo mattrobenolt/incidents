@@ -1,6 +1,6 @@
 {% extends "bootstrap.jinja" %}
 
-{% block content %}
+{% block extrastyles %}
 <style type="text/css">
 h1 .input-lg {
     font-size: 36px;
@@ -49,6 +49,9 @@ pre {
     font-size: 1.2em;
 }
 </style>
+{% endblock %}
+
+{% block content %}
 <h1>{{ project.team.name }} / {{ project.name }}</h1>
 <form>
 <input name="q" value="{{ query }}" placeholder="Search" class="form-control input-lg" />
