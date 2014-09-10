@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import TemplateView, edit
 
-from incidents.models import Event, Project
+from incidents.models import Event, Project, Incident
 from incidents.decorators import projectmember_required
 from incidents.forms.project import ProjectForm
 from incidents.views.team import MembershipRequiredMixin as TeamMembershipRequiredMixin
@@ -27,7 +27,18 @@ class DetailView(LoginRequiredMixin, MembershipRequiredMixin, TemplateView):
         if self.request.GET.get('q'):
             filters['content'] = self.request.GET['q']
         events = events.filter(**filters).order_by('-level', '-created').load_all()[:limit]
-        return {'project': project, 'events': events, 'query': self.request.GET.get('q', '')}
+
+        try:
+            incident = project.current_incident()
+        except Incident.DoesNotExist:
+            incident = None
+
+        return {
+            'project': project,
+            'events': events,
+            'incident': incident,
+            'query': self.request.GET.get('q', ''),
+        }
 
 
 class CRUDView(LoginRequiredMixin):

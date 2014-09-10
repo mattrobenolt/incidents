@@ -23,14 +23,18 @@ class Project(models.Model):
 
     objects = ProjectManager()
 
-    def start_incident(self, owner, name=None):
-        assert self.current_incident is None
+    def start_incident(self, owner, name=''):
         incident = Incident.objects.create_incident(
             owner=owner, team=self.team,
             project=self, name=name)
-        self.current_incident = incident
-        self.save(update_fields=('current_incident',))
         return incident
+
+    def close_incident(self):
+        return bool(Incident.objects.close_incident(project=self))
+
+    def current_incident(self):
+        "Returns the one running incident, propagate any other errors"
+        return Incident.objects.current_incident(project=self).get()
 
     def add_member(self, user):
         member = ProjectMember(user=user, project=self)

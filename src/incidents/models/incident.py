@@ -19,25 +19,38 @@ class Actor(models.Model):
 
 
 class IncidentManager(models.Manager):
-    def create_incident(self, owner, team, project, name):
+    def create_incident(self, owner, team, project, name=''):
         incident = self.model(owner=owner, team=team,
                               project=project, name=name)
         incident.save(using=self._db)
         return incident
+
+    def current_incident(self, project):
+        return self.filter(
+            project=project,
+            finished__isnull=True,
+            started__lte=timezone.now(),
+        )
+
+    def close_incident(self, project):
+        incident = self.current_incident(project=project)
+        rows = incident.update(finished=timezone.now())
+        assert rows <= 1
+        return rows
 
 
 class Incident(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
     team = models.ForeignKey('incidents.Team')
     project = models.ForeignKey('incidents.Project')
-    name = models.CharField(max_length=250)
-    started = models.DateTimeField(auto_now_add=True, db_index=True)
-    finished = models.DateTimeField(null=True, db_index=True)
+    name = models.CharField(max_length=250, blank=True)
+    started = models.DateTimeField(auto_now_add=True, db_index=True, blank=True)
+    finished = models.DateTimeField(blank=True, null=True, db_index=True)
 
     objects = IncidentManager()
 
     def is_complete(self):
-        return self.started and self.finished
+        return bool(self.started and self.finished)
 
     def claim_events(self, batch_size=100):
         "Claim all events within the range of this Incident"
@@ -50,6 +63,17 @@ class Incident(models.Model):
         if updated < batch_size:
             return updated
         return updated + self.claim_events(batch_size)
+
+    def close(self, timestamp=None, **kwargs):
+        assert not self.is_complete()
+
+        if timestamp is None:
+            timestamp = timezone.now()
+        self.finished = timestamp
+        return self.save(**kwargs)
+
+    def __unicode__(self):
+        return u'{0} -> {1}'.format(self.started, self.finished)
 
 
 class EventManager(models.Manager):

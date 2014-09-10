@@ -53,6 +53,9 @@ pre {
 
 {% block content %}
 <h1>{{ project.team.name }} / {{ project.name }}</h1>
+<form action="{% if incident %}incidents/end/{% else %}incidents/new/{% endif %}" method="post">{% csrf_token %}
+    <button class="btn {% if incident %}btn-normal disabled{% else %}btn-success{% endif %}">Start Incident</button>
+    <button class="btn {% if incident %}btn-danger{% else %}btn-normal disabled{% endif %}">Finish</button></form>
 <form>
 <input name="q" value="{{ query }}" placeholder="Search" class="form-control input-lg" />
 </form>
