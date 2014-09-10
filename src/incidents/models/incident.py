@@ -52,6 +52,11 @@ class Incident(models.Model):
     def is_complete(self):
         return bool(self.started and self.finished)
 
+    @property
+    def duration(self):
+        assert self.is_complete()
+        return self.finished - self.started
+
     def claim_events(self, batch_size=100):
         "Claim all events within the range of this Incident"
         assert self.is_complete()
