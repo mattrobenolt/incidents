@@ -11,18 +11,19 @@ from setuptools.command.test import test as TestCommand
 
 install_requires = [
     'Django>=1.7',
-    'django-allauth',
-    'django-jinja',
-    'django-haystack',
     'celery',
     'celery-haystack',
+    'django-allauth',
+    'django-haystack',
+    'django-jinja',
 ]
 
 tests_require = [
+    'factory_boy',
+    'flake8',
     'pytest',
     'pytest-cov',
     'pytest-django',
-    'flake8',
 ]
 
 postgres_requires = [

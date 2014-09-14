@@ -1,7 +1,7 @@
 -e .
 Django>=1.7
-django-allauth
-django-jinja
-django-haystack
 celery
 celery-haystack
+django-allauth
+django-haystack
+django-jinja
