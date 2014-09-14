@@ -1,0 +1,19 @@
+{
+  "name": "incidents",
+  "version": "0.0.0",
+  "homepage": "https://github.com/mattrobenolt/incidents",
+  "authors": [
+    "Matt Robenolt <matt@ydekproductions.com>"
+  ],
+  "license": "BSD",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "bootstrap": "~3.2.0"
+  }
+}

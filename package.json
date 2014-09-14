@@ -1,0 +1,29 @@
+{
+  "name": "incidents",
+  "version": "0.0.0",
+  "description": "incidents ~~~~~~~~~",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mattrobenolt/incidents.git"
+  },
+  "author": "",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/mattrobenolt/incidents/issues"
+  },
+  "homepage": "https://github.com/mattrobenolt/incidents",
+  "devDependencies": {
+    "bower": "^1.3.10",
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-concat": "^0.5.0",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-less": "^0.11.4",
+    "grunt-contrib-uglify": "^0.5.1",
+    "grunt-contrib-watch": "^0.6.1"
+  },
+  "private": true
+}

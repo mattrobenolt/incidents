@@ -54,3 +54,7 @@ docs/_build/
 
 *.sqlite3
 whoosh_index/
+
+bower_components/
+node_modules/
+design/
