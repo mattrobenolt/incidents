@@ -21,6 +21,7 @@ install_requires = [
 tests_require = [
     'factory_boy',
     'flake8',
+    'mock',
     'pytest',
     'pytest-cov',
     'pytest-django',
