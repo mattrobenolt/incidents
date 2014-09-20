@@ -18,6 +18,14 @@ class Actor(models.Model):
         return u'{0} ({1})'.format(self.alias, self.plugin)
 
 
+class Tag(models.Model):
+    project = models.ForeignKey('incidents.Project')
+    slug = models.SlugField(max_length=100)
+
+    class Meta:
+        unique_together = ('slug', 'project')
+
+
 class IncidentManager(models.Manager):
     def create_incident(self, owner, team, project, name=''):
         incident = self.model(owner=owner, team=team,
@@ -46,6 +54,7 @@ class Incident(models.Model):
     name = models.CharField(max_length=250, blank=True)
     started = models.DateTimeField(auto_now_add=True, db_index=True, blank=True)
     finished = models.DateTimeField(blank=True, null=True, db_index=True)
+    tags = models.ManyToManyField(Tag)
 
     objects = IncidentManager()
 
