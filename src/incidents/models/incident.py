@@ -26,6 +26,25 @@ class Tag(models.Model):
         unique_together = ('slug', 'project')
 
 
+class Question(models.Model):
+    project = models.ForeignKey('incidents.Project')
+    prompt = models.TextField()
+
+    def __unicode__(self):
+        return self.prompt[:20]
+
+
+class Response(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    incident = models.ForeignKey('incidents.Incident')
+    question = models.ForeignKey('incidents.Question')
+    response = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.response[:20]
+
+
 class IncidentManager(models.Manager):
     def create_incident(self, owner, team, project, name=''):
         incident = self.model(owner=owner, team=team,
