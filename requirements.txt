@@ -3,5 +3,5 @@ Django>=1.7
 celery
 celery-haystack
 django-allauth
-django-haystack
+django-haystack>=2.3.0
 django-jinja

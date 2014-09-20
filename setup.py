@@ -14,7 +14,7 @@ install_requires = [
     'celery',
     'celery-haystack',
     'django-allauth',
-    'django-haystack',
+    'django-haystack>=2.3.0',
     'django-jinja',
 ]
 
